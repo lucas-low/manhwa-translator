@@ -1,0 +1,63 @@
+#!/bin/zsh
+# mt-translate: translate a saved chapter.
+# Usage: mt-translate <folder-or-html>
+# Save the page in Chrome with ⌘S as "Webpage, Complete", then run this on the
+# resulting _files folder. The translated viewer opens when it finishes.
+
+set -e
+SCRIPT_DIR="$( cd "$( dirname "${(%):-%N}" )" && pwd )"
+MT_DIR="$HOME/manga-image-translator"
+PY_SCRIPT="$HOME/translate-folder.py"
+SERVER_LOG="/tmp/manga-server.log"
+SERVER_PID_FILE="/tmp/manga-server.pid"
+SERVER_URL="http://127.0.0.1:8000"
+
+if [[ -z "$1" ]]; then
+    echo "Usage: mt-translate <folder-with-images>"
+    echo "       mt-translate ~/Downloads/chapter22_files"
+    exit 1
+fi
+
+INPUT="${1:A}"  # absolute path
+# If a .html is passed, use the _files folder beside it
+if [[ -f "$INPUT" && "$INPUT" == *.html ]]; then
+    BASE="${INPUT%.html}"
+    if [[ -d "${BASE}_files" ]]; then
+        INPUT="${BASE}_files"
+        echo "[mt] resolved HTML -> ${INPUT}"
+    fi
+fi
+# If a folder name was given without _files suffix, try appending it
+if [[ ! -d "$INPUT" && -d "${INPUT}_files" ]]; then
+    INPUT="${INPUT}_files"
+    echo "[mt] resolved -> ${INPUT}"
+fi
+if [[ ! -d "$INPUT" ]]; then
+    echo "Error: '$INPUT' is not a directory"
+    echo "Hint: pass either the saved .html file or its companion _files folder."
+    echo "      For paths with spaces, keep ~ outside quotes:"
+    echo "        mt-translate ~/\"Downloads/foo bar_files\""
+    echo "      Or use TAB completion: mt-translate ~/Downloads/<TAB>"
+    exit 1
+fi
+
+# Check server health, start if down
+if ! curl -s -o /dev/null -w "%{http_code}" --max-time 3 "$SERVER_URL/" 2>/dev/null | grep -q "200"; then
+    echo "[mt] server down, starting..."
+    cd "$MT_DIR" && source venv/bin/activate
+    nohup python server/main.py --use-gpu --nonce None > "$SERVER_LOG" 2>&1 &
+    echo $! > "$SERVER_PID_FILE"
+    # Wait up to 30s for server
+    for i in {1..30}; do
+        if curl -s -o /dev/null -w "%{http_code}" --max-time 2 "$SERVER_URL/" 2>/dev/null | grep -q "200"; then
+            echo "[mt] server up after ${i}s"
+            break
+        fi
+        sleep 1
+    done
+else
+    echo "[mt] server already running"
+fi
+
+cd "$MT_DIR" && source venv/bin/activate
+exec python3 "$PY_SCRIPT" "$INPUT"
