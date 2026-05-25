@@ -1,0 +1,24 @@
+{
+  "manifest_version": 3,
+  "name": "MT Translate",
+  "version": "1.1.0",
+  "description": "One-button manga translator via DevTools Protocol, backed by a local server at 127.0.0.1:8000",
+  "permissions": ["activeTab", "scripting", "storage", "debugger", "contextMenus"],
+  "host_permissions": [
+    "http://127.0.0.1/*",
+    "<all_urls>"
+  ],
+  "action": {
+    "default_title": "MT Translate (click to translate page)"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}
