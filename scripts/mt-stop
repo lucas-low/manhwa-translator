@@ -1,0 +1,19 @@
+#!/bin/zsh
+# Stop all MT services + unload aya from GPU memory (frees ~21GB).
+# Models on disk are kept; just unloaded from RAM.
+
+LA="$HOME/Library/LaunchAgents"
+
+for svc in com.lucaslow.mt-warmup com.lucaslow.mt-ui com.lucaslow.mt-translator com.lucaslow.mt-executor-2; do
+    if [[ -f "$LA/$svc.plist" ]] && launchctl list | grep -q "$svc"; then
+        launchctl unload "$LA/$svc.plist" 2>/dev/null
+        echo "[mt] stopped $svc"
+    fi
+done
+
+# Tell Ollama to unload aya from memory (preserves disk model)
+curl -s http://localhost:11434/api/generate \
+    -d '{"model":"aya-expanse:32b","keep_alive":0}' > /dev/null 2>&1 &
+
+sleep 1
+echo "[mt] all services stopped; ~22 GB RAM freed"

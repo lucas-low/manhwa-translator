@@ -1,0 +1,30 @@
+#!/bin/zsh
+# Show MT service status at a glance.
+
+echo "=== launchd services ==="
+launchctl list | grep com.lucaslow || echo "  (none loaded)"
+
+echo ""
+echo "=== ports ==="
+lsof -nP -iTCP -sTCP:LISTEN 2>/dev/null | grep -E ":8000|:8001|:8002|:8003|:11434" | awk '{printf "  %-12s pid=%s\n", $9, $2}' | sort -u
+
+echo ""
+echo "=== health ==="
+for port in 8000 8002; do
+    code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 2 "http://127.0.0.1:$port/" 2>/dev/null || echo "down")
+    printf "  port %d: %s\n" "$port" "$code"
+done
+
+echo ""
+echo "=== ollama loaded models (RAM) ==="
+ollama ps 2>/dev/null | tail -n +2 | awk 'NF {print "  "$0}' || echo "  ollama unreachable"
+
+echo ""
+echo "=== cache ==="
+curl -s --max-time 2 http://127.0.0.1:8002/cache/stats 2>/dev/null | python3 -c "import sys,json;d=json.load(sys.stdin);print(f'  {d[\"count\"]} files, {d[\"total_mb\"]} MB')" 2>/dev/null || echo "  unreachable"
+
+echo ""
+echo "=== quick commands ==="
+echo "  mt-start          - turn everything on"
+echo "  mt-stop           - turn everything off (frees ~22 GB)"
+echo "  mt-translate <dir>- batch translate a folder"

@@ -1,0 +1,34 @@
+#!/bin/zsh
+# Start all MT services (translator + UI + warmup).
+# Use when you've turned auto-start off, or when services aren't running.
+
+set -e
+LA="$HOME/Library/LaunchAgents"
+
+for svc in com.lucaslow.mt-translator com.lucaslow.mt-ui; do
+    if launchctl list | grep -q "$svc"; then
+        echo "[mt] $svc already running"
+    else
+        launchctl load "$LA/$svc.plist"
+        echo "[mt] started $svc"
+    fi
+done
+
+# Wait for both ports to be alive
+echo -n "[mt] waiting for services"
+for i in {1..30}; do
+    if curl -s -o /dev/null --max-time 1 http://127.0.0.1:8000/ && \
+       curl -s -o /dev/null --max-time 1 http://127.0.0.1:8002/; then
+        echo " up after ${i}s"
+        break
+    fi
+    echo -n "."
+    sleep 1
+done
+
+# Pre-warm aya (fire-and-forget; runs in background)
+launchctl load "$LA/com.lucaslow.mt-warmup.plist" 2>/dev/null || true
+
+echo "[mt] translator:  http://127.0.0.1:8000"
+echo "[mt] dashboard:   http://127.0.0.1:8002"
+echo "[mt] Click the floating Translate Chapter button on any manga page."
