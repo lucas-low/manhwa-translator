@@ -3,14 +3,14 @@
 <plist version="1.0">
 <dict>
     <key>Label</key>
-    <string>com.lucaslow.mt-ui</string>
+    <string>dev.mt-stack.mt-ui</string>
     <key>ProgramArguments</key>
     <array>
-        <string>/Users/lucaslow/manga-image-translator/venv/bin/python</string>
-        <string>/Users/lucaslow/mt-ui.py</string>
+        <string>__MT_HOME__/venv/bin/python</string>
+        <string>__REPO__/server/mt_ui.py</string>
     </array>
     <key>WorkingDirectory</key>
-    <string>/Users/lucaslow</string>
+    <string>__REPO__</string>
     <key>RunAtLoad</key>
     <true/>
     <key>KeepAlive</key>

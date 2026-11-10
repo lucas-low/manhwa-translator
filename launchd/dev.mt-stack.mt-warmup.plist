@@ -3,16 +3,25 @@
 <plist version="1.0">
 <dict>
     <key>Label</key>
-    <string>com.lucaslow.mt-warmup</string>
+    <string>dev.mt-stack.mt-warmup</string>
     <key>ProgramArguments</key>
     <array>
-        <string>/Users/lucaslow/manga-image-translator/venv/bin/python</string>
-        <string>/Users/lucaslow/mt-warmup.py</string>
+        <string>__MT_HOME__/venv/bin/python</string>
+        <string>__REPO__/server/mt_warmup.py</string>
     </array>
+    <key>WorkingDirectory</key>
+    <string>__REPO__</string>
     <key>RunAtLoad</key>
     <true/>
     <key>KeepAlive</key>
-    <false/>
+    <dict>
+        <key>SuccessfulExit</key>
+        <false/>
+        <key>Crashed</key>
+        <true/>
+    </dict>
+    <key>ThrottleInterval</key>
+    <integer>10</integer>
     <key>StandardOutPath</key>
     <string>/tmp/mt-warmup.log</string>
     <key>StandardErrorPath</key>

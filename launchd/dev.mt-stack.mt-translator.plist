@@ -3,21 +3,14 @@
 <plist version="1.0">
 <dict>
     <key>Label</key>
-    <string>com.lucaslow.mt-translator</string>
+    <string>dev.mt-stack.mt-translator</string>
     <key>ProgramArguments</key>
     <array>
-        <string>/Users/lucaslow/manga-image-translator/venv/bin/python</string>
-        <string>/Users/lucaslow/manga-image-translator/server/main.py</string>
-        <string>--use-gpu</string>
-        <string>--host</string>
-        <string>127.0.0.1</string>
-        <string>--port</string>
-        <string>8000</string>
-        <string>--nonce</string>
-        <string>None</string>
+        <string>__MT_HOME__/venv/bin/python</string>
+        <string>__MT_HOME__/server/main.py</string>
     </array>
     <key>WorkingDirectory</key>
-    <string>/Users/lucaslow/manga-image-translator</string>
+    <string>__MT_HOME__</string>
     <key>RunAtLoad</key>
     <true/>
     <key>KeepAlive</key>
@@ -33,10 +26,5 @@
     <string>/tmp/mt-translator.log</string>
     <key>StandardErrorPath</key>
     <string>/tmp/mt-translator.log</string>
-    <key>EnvironmentVariables</key>
-    <dict>
-        <key>PATH</key>
-        <string>/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
-    </dict>
 </dict>
 </plist>
