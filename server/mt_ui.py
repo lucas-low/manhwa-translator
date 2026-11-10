@@ -23,8 +23,11 @@ from fastapi.middleware.cors import CORSMiddleware
 import httpx
 import uvicorn
 
+# Path to the manhwa/manga prompt config. Override with MT_GPT_CONFIG.
+GPT_CONFIG = os.environ.get("MT_GPT_CONFIG", os.path.expanduser("~/.config/mt-stack/gpt_config.yaml"))
+
 API = "http://127.0.0.1:8000/translate/with-form/image/stream"
-OUT_ROOT = Path.home() / "Downloads" / "mt-ui-out"
+OUT_ROOT = Path(os.environ.get("MT_OUT_ROOT", str(Path.home() / "Downloads" / "mt-ui-out")))
 CACHE_DIR = OUT_ROOT / "cache"
 METRICS_LOG = OUT_ROOT / "metrics.jsonl"
 OUT_ROOT.mkdir(parents=True, exist_ok=True)
@@ -78,7 +81,7 @@ def _cache_touch(path: Path):
         pass
 
 CONFIG = {
-    "translator": {"translator": "custom_openai", "target_lang": "ENG", "no_text_lang_skip": False, "gpt_config": "/Users/lucaslow/manga-image-translator/gpt_config.yaml"},
+    "translator": {"translator": "custom_openai", "target_lang": "ENG", "no_text_lang_skip": False, "gpt_config": GPT_CONFIG},
     "detector":  {"detector": "default", "detection_size": 1536, "text_threshold": 0.5, "box_threshold": 0.7, "unclip_ratio": 2.3},
     "ocr":       {"ocr": "48px", "min_text_length": 0, "ignore_bubble": 0},
     "inpainter": {"inpainter": "lama_mpe", "inpainting_size": 1024, "inpainting_precision": "bf16"},

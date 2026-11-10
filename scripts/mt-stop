@@ -4,7 +4,7 @@
 
 LA="$HOME/Library/LaunchAgents"
 
-for svc in com.lucaslow.mt-warmup com.lucaslow.mt-ui com.lucaslow.mt-translator com.lucaslow.mt-executor-2; do
+for svc in dev.mt-stack.mt-warmup dev.mt-stack.mt-ui dev.mt-stack.mt-translator dev.mt-stack.mt-executor-2; do
     if [[ -f "$LA/$svc.plist" ]] && launchctl list | grep -q "$svc"; then
         launchctl unload "$LA/$svc.plist" 2>/dev/null
         echo "[mt] stopped $svc"

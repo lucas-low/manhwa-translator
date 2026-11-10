@@ -3,6 +3,7 @@
 mt-warmup: fire a dummy translate to pre-load detector/OCR/inpainter/LLM models.
 Runs once at login via launchd. Saves ~60s on first real translation of the day.
 """
+import os
 import io
 import json
 import sys
@@ -10,6 +11,9 @@ import time
 from PIL import Image, ImageDraw
 
 import requests
+
+# Path to the manhwa/manga prompt config. Override with MT_GPT_CONFIG.
+GPT_CONFIG = os.environ.get("MT_GPT_CONFIG", os.path.expanduser("~/.config/mt-stack/gpt_config.yaml"))
 
 SERVER = "http://127.0.0.1:8000"
 HEALTH = f"{SERVER}/"
@@ -19,7 +23,7 @@ CONFIG = {
     "translator": {
         "translator": "custom_openai",
         "target_lang": "ENG",
-        "gpt_config": "/Users/lucaslow/manga-image-translator/gpt_config.yaml",
+        "gpt_config": GPT_CONFIG,
     },
     "detector":  {"detector": "default", "detection_size": 1536, "text_threshold": 0.5, "box_threshold": 0.7, "unclip_ratio": 2.3},
     "ocr":       {"ocr": "48px", "min_text_length": 0, "ignore_bubble": 0},

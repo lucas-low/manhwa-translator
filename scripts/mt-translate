@@ -6,8 +6,8 @@
 
 set -e
 SCRIPT_DIR="$( cd "$( dirname "${(%):-%N}" )" && pwd )"
-MT_DIR="$HOME/manga-image-translator"
-PY_SCRIPT="$HOME/translate-folder.py"
+MT_DIR="${MT_HOME:-$HOME/manga-image-translator}"
+PY_SCRIPT="$SCRIPT_DIR/translate_folder.py"
 SERVER_LOG="/tmp/manga-server.log"
 SERVER_PID_FILE="/tmp/manga-server.pid"
 SERVER_URL="http://127.0.0.1:8000"

@@ -5,7 +5,7 @@
 set -e
 LA="$HOME/Library/LaunchAgents"
 
-for svc in com.lucaslow.mt-translator com.lucaslow.mt-ui; do
+for svc in dev.mt-stack.mt-translator dev.mt-stack.mt-ui; do
     if launchctl list | grep -q "$svc"; then
         echo "[mt] $svc already running"
     else
@@ -27,7 +27,7 @@ for i in {1..30}; do
 done
 
 # Pre-warm aya (fire-and-forget; runs in background)
-launchctl load "$LA/com.lucaslow.mt-warmup.plist" 2>/dev/null || true
+launchctl load "$LA/dev.mt-stack.mt-warmup.plist" 2>/dev/null || true
 
 echo "[mt] translator:  http://127.0.0.1:8000"
 echo "[mt] dashboard:   http://127.0.0.1:8002"
