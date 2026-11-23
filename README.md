@@ -130,8 +130,5 @@ The suite covers the cache key, LRU eviction and path handling. It also fails if
 - Quality is whatever the local model gives you. Expect wrong names and tone slips now and then.
 - Use it on content you have the right to read. It is a reading aid and not a way to redistribute translations.
 
-## History
-
-The first working version was written on 25 and 26 May 2026 and has run as launchd services on the author's machine since. The May commits here are reconstructed from the original files' modification times. The repo was created and packaged in November 2026.
 
 MIT licensed. See [LICENSE](LICENSE).
