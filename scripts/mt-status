@@ -2,7 +2,7 @@
 # Show MT service status at a glance.
 
 echo "=== launchd services ==="
-launchctl list | grep com.lucaslow || echo "  (none loaded)"
+launchctl list | grep -E 'dev\.mt-stack|com\.lucaslow\.mt-' || echo "  (none loaded)"
 
 echo ""
 echo "=== ports ==="
