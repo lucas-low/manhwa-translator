@@ -70,7 +70,7 @@ class Eviction(unittest.TestCase):
 
 class Paths(unittest.TestCase):
     def test_no_hardcoded_home_in_source(self):
-        for f in list((ROOT / "server").glob("*.py")) + list((ROOT / "scripts").glob("*")):
+        for f in list((ROOT / "server").glob("*.py")) + list((ROOT / "scripts").glob("*")) + list((ROOT / "extension").glob("*.js")):
             text = f.read_text(errors="ignore")
             self.assertNotIn("/Users/", text, f.name)
 

@@ -8,9 +8,9 @@
   // Korean, Japanese and Chinese in testing. The upstream Config enum accepts
   // {32px, 48px, 48px_ctc, mocr}. ocr_large exists as a model file but is not registered.
   const LANG_PRESETS = {
-    ko: { label: "한 KO", ocr: "48px", gpt_config: "/Users/lucaslow/manga-image-translator/gpt_config_ko.yaml" },
-    ja: { label: "あ JA", ocr: "48px", gpt_config: "/Users/lucaslow/manga-image-translator/gpt_config_ja.yaml" },
-    zh: { label: "中 ZH", ocr: "48px", gpt_config: "/Users/lucaslow/manga-image-translator/gpt_config_zh.yaml" },
+    ko: { label: "한 KO", ocr: "48px" },
+    ja: { label: "あ JA", ocr: "48px" },
+    zh: { label: "中 ZH", ocr: "48px" },
   };
   const LANG_STORAGE_KEY = "mt-source-lang";
 
@@ -26,7 +26,7 @@
   function buildConfig(lang) {
     const p = LANG_PRESETS[lang] || LANG_PRESETS.ko;
     return {
-      translator: { translator: "custom_openai", target_lang: "ENG", no_text_lang_skip: false, gpt_config: p.gpt_config },
+      translator: { translator: "custom_openai", target_lang: "ENG", no_text_lang_skip: false },
       detector:   { detector: "default", detection_size: 1536, text_threshold: 0.5, box_threshold: 0.7, unclip_ratio: 2.3 },
       ocr:        { ocr: p.ocr, min_text_length: 0, ignore_bubble: 0 },
       inpainter:  { inpainter: "lama_mpe", inpainting_size: 1024, inpainting_precision: "bf16" },

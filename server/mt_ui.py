@@ -318,6 +318,7 @@ async def translate_cached(image: UploadFile = File(...), config: str = Form("{}
         # Build a config variant with this translator
         variant = json.loads(config) if config else {}
         variant.setdefault("translator", {})["translator"] = t
+        variant["translator"]["gpt_config"] = GPT_CONFIG  # the server owns the prompt path
         variant_str = json.dumps(variant)
 
         # Per-translator cache (so a later request with explicit `t` is also a hit)
